@@ -2,10 +2,21 @@ const net = require('net');
 
 const PORT = 8080;
 
+let wantedFile;
+
 //create connection to server
-const client = net.createConnection(PORT, () => {
+const client = net.createConnection(PORT, 'localhost', () => {
   client.setEncoding('utf8');
-  console.log('connection to server successful');
+  console.log(`Request made to ${PORT}`);
+
+  //grabs request from node command line
+  process.argv.forEach((value, index) => {
+    console.log(`${index}: ${value}`);
+    wantedFile = process.argv[2];
+
+    //writes to server
+    client.write(wantedFile);
+  })
 });
 
 //send 'requests' to server
@@ -16,5 +27,6 @@ process.stdin.pipe(client);
 
 //close connection
 client.on('end', () => {
+  process.exit(0);
   console.log('terminating connection');
 });

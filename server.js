@@ -16,11 +16,17 @@ const server = net.createServer((request) => {
   //log that request has been made
   request.on('data', (data) => {
     console.log('A request has been made');
+    let extractData = data.length/2
+    console.log(extractData);
     generateResponse(data, request);
-    request.end(() => {
-      console.log(`Request fulfilled`);
-    });
+    // request.end(() => {
+    //   console.log(`Request fulfilled`);
+    // });
   })
+})
+
+server.on('end', () => {
+  console.log(`Request fulfilled`);
 })
 
 //listening on port
@@ -28,6 +34,9 @@ server.listen(PORT, () => {
   console.log(`Waiting for requests`);
 });
 
+
+
+/************** HELPER FUNCTIONS **************/
 //function that takes request and generates response
 function generateResponse(data, sender) {
 
@@ -48,8 +57,8 @@ function generateResponse(data, sender) {
       sender.write(createHeader(httpVersion, statusMessages.good, source.helium));
       break;
 
-    case '/styles.css':
-      sender.write(createHeader(httpVersion, statusMessages.good, source.helium));
+    case '/css/styles.css':
+      sender.write(createHeader(httpVersion, statusMessages.good, source.css));
       break;
 
     case `/`:

@@ -41,27 +41,36 @@ function generateResponse(data, sender) {
   //grabs requested document and returns response header
   switch (wantedFile) {
     case '/hydrogen.html':
-      sender.write(`${httpVersion} ${statusMessages.good}\n${source.hydrogen}`);
+      sender.write(createHeader(httpVersion, statusMessages.good, source.hydrogen));
       break;
 
     case '/helium.html':
-      sender.write(`${httpVersion} ${statusMessages.good}\n${source.helium}`);
+      sender.write(createHeader(httpVersion, statusMessages.good, source.helium));
       break;
 
     case '/styles.css':
-      sender.write(`${httpVersion} ${statusMessages.good}\n${source.css}`);
+      sender.write(createHeader(httpVersion, statusMessages.good, source.helium));
       break;
 
     case `/`:
-      sender.write(`${httpVersion} ${statusMessages.good}\n${source.indexx}`);
+      sender.write(createHeader(httpVersion, statusMessages.good, source.indexx));
       break;
 
     case '/index.html':
-      sender.write(`${httpVersion} ${statusMessages.good}\n${source.indexx}`);
+      sender.write(createHeader(httpVer, statusMessages.good, source.indexx));
       break;
 
     default:
-      sender.write(`${httpVersion} ${statusMessages.notFound}\n${source.fourOhFour}`);
+      sender.write(createHeader(httpVersion, statusMessages.notFound, source.fourOhFour));
       break;
   }
-}
+};
+
+function createHeader(httpVer, status, source){
+  return `${httpVer} ${status}
+Status: ${httpVer} ${status}
+Server: ${process.env.USER} ${process.env.TERM_PROGRAM} ${process.env.TERM_PROGRAM_VERSION}
+Date: ${new Date()}
+
+${source}`
+};

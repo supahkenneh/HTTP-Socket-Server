@@ -1,8 +1,5 @@
 const source = require('./sourcefiles');
-
-//use net methods
 const net = require('net');
-
 const PORT = 8080;
 
 const statusMessages = {
@@ -20,11 +17,9 @@ const server = net.createServer((request) => {
   request.on('data', (data) => {
     console.log('A request has been made');
     generateResponse(data, request);
-  })
-
-  //disconnect
-  request.on('end', () => {
-    console.log(`Request fulfilled`);
+    request.end(() => {
+      console.log(`Request fulfilled`);
+    });
   })
 })
 
@@ -33,53 +28,40 @@ server.listen(PORT, () => {
   console.log(`Waiting for requests`);
 });
 
-
+//function that takes request and generates response
 function generateResponse(data, sender) {
 
-  //array of data in request seperated by their line breaks
+  //parses through data and request header info
   let parsedRequest = data.split('\r\n');
   let header = parsedRequest[0].split(' ');
   let wantedFile = header[1];
   let httpVersion = header[2];
-  console.log(`requested ${wantedFile}`);
+  console.log(`${wantedFile} requested`);
 
-  //grabs requested document
+  //grabs requested document and returns response header
   switch (wantedFile) {
     case '/hydrogen.html':
-      console.log(`${httpVersion} ${statusMessages.good}\n${source.hydrogen}`)
       sender.write(`${httpVersion} ${statusMessages.good}\n${source.hydrogen}`);
-      sender.end();
       break;
 
     case '/helium.html':
-      console.log(`${httpVersion} ${statusMessages.good}\n${source.helium}`)
       sender.write(`${httpVersion} ${statusMessages.good}\n${source.helium}`);
-      sender.end();
-      break;
-
-    case '/404.html':
-      sender.write(`${httpVersion} ${statusMessages.good}\n${source.fourOhFour}`);
-      sender.end();
       break;
 
     case '/styles.css':
       sender.write(`${httpVersion} ${statusMessages.good}\n${source.css}`);
-      sender.end();
       break;
 
     case `/`:
       sender.write(`${httpVersion} ${statusMessages.good}\n${source.indexx}`);
-      sender.end();
       break;
 
     case '/index.html':
       sender.write(`${httpVersion} ${statusMessages.good}\n${source.indexx}`);
-      sender.end();
       break;
 
     default:
       sender.write(`${httpVersion} ${statusMessages.notFound}\n${source.fourOhFour}`);
-      sender.end();
       break;
   }
 }

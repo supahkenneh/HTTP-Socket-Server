@@ -2,8 +2,6 @@ const net = require('net');
 
 const PORT = 8080;
 
-let wantedFile;
-
 //create connection to server
 const client = net.createConnection(PORT, 'localhost', () => {
   client.setEncoding('utf8');
@@ -12,21 +10,23 @@ const client = net.createConnection(PORT, 'localhost', () => {
   //grabs request from node command line
   process.argv.forEach((value, index) => {
     console.log(`${index}: ${value}`);
-    wantedFile = process.argv[2];
+    //grabs .html or .css portion of address
+    let wantedFile = process.argv[2];
+    let indexOfHTML = wantedFile.indexOf('/');
+    let requestedHTML = wantedFile.substring(indexOfHTML, wantedFile.length);
 
-    //writes to server
-    client.write(wantedFile);
+    //writes to server in request header format
+    client.write(`GET ${requestedHTML} HTTP/1.1`);
   })
 });
 
 //send 'requests' to server
 client.on('data', (request) => {
-  console.log(request.toString().trim());
+  // console.log(request.toString().trim());
 })
 process.stdin.pipe(client);
 
 //close connection
 client.on('end', () => {
-  process.exit(0);
   console.log('terminating connection');
 });

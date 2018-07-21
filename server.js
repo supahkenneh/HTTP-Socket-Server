@@ -16,17 +16,13 @@ const server = net.createServer((request) => {
   //log that request has been made
   request.on('data', (data) => {
     console.log('A request has been made');
-    let extractData = data.length/2
-    console.log(extractData);
     generateResponse(data, request);
-    // request.end(() => {
-    //   console.log(`Request fulfilled`);
-    // });
+    console.log(`Request fulfilled!`);
   })
 })
 
 server.on('end', () => {
-  console.log(`Request fulfilled`);
+  console.log(`Disconnect client`);
 })
 
 //listening on port
@@ -40,7 +36,7 @@ server.listen(PORT, () => {
 //function that takes request and generates response
 function generateResponse(data, sender) {
 
-  //parses through data and request header info
+  //parses through request header info
   let parsedRequest = data.split('\r\n');
   let header = parsedRequest[0].split(' ');
   let wantedFile = header[1];

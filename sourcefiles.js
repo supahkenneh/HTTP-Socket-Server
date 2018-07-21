@@ -1,5 +1,6 @@
 module.exports = {
-  fourOhFour: `<!DOCTYPE html>
+  fourOhFour: `
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -15,7 +16,8 @@ module.exports = {
 </body>
 </html>`,
 
-helium: `<!DOCTYPE html>
+helium: `
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -48,7 +50,8 @@ hydrogen: `
 </body>
 </html>`,
 
-indexx: `<!DOCTYPE html>
+indexx: `
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -70,7 +73,8 @@ indexx: `<!DOCTYPE html>
 </body>
 </html>`,
 
-css: `@import url(http://fonts.googleapis.com/css?family=Open+Sans|Roboto+Slab);
+css: `
+@import url(http://fonts.googleapis.com/css?family=Open+Sans|Roboto+Slab);
 
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126

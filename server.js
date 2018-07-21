@@ -20,7 +20,6 @@ const server = net.createServer((request) => {
   request.on('data', (data) => {
     console.log('A request has been made');
     generateResponse(data, request);
-    request.end();
   })
 
   //disconnect
@@ -37,41 +36,50 @@ server.listen(PORT, () => {
 
 function generateResponse(data, sender) {
 
-//array of data in request seperated by their line breaks
-let parsedRequest = data.split('\r\n');
-let header = parsedRequest[0].split(' ');
-let wantedFile = header[1];
-let httpVersion = header[2];
-console.log(`requested ${wantedFile}`);
+  //array of data in request seperated by their line breaks
+  let parsedRequest = data.split('\r\n');
+  let header = parsedRequest[0].split(' ');
+  let wantedFile = header[1];
+  let httpVersion = header[2];
+  console.log(`requested ${wantedFile}`);
 
-//grabs requested document
+  //grabs requested document
   switch (wantedFile) {
     case '/hydrogen.html':
-    sender.write(`${httpVersion} ${statusMessages.good}\n${source.hydrogen}`)
+      console.log(`${httpVersion} ${statusMessages.good}\n${source.hydrogen}`)
+      sender.write(`${httpVersion} ${statusMessages.good}\n${source.hydrogen}`);
+      sender.end();
       break;
 
     case '/helium.html':
-    sender.write(`${httpVersion} ${statusMessages.good}\n${source.helium}`)
-    break;
+      console.log(`${httpVersion} ${statusMessages.good}\n${source.helium}`)
+      sender.write(`${httpVersion} ${statusMessages.good}\n${source.helium}`);
+      sender.end();
+      break;
 
     case '/404.html':
-    sender.write(`${httpVersion} ${statusMessages.good}\n${source.fourOhFour}`)
-    break;
+      sender.write(`${httpVersion} ${statusMessages.good}\n${source.fourOhFour}`);
+      sender.end();
+      break;
 
     case '/styles.css':
-    sender.write(`${httpVersion} ${statusMessages.good}\n${source.css}`)
-    break;
+      sender.write(`${httpVersion} ${statusMessages.good}\n${source.css}`);
+      sender.end();
+      break;
 
     case `/`:
-    sender.write(`${httpVersion} ${statusMessages.good}\n${source.indexx}`)
-    break;
+      sender.write(`${httpVersion} ${statusMessages.good}\n${source.indexx}`);
+      sender.end();
+      break;
 
     case '/index.html':
-    sender.write(`${httpVersion} ${statusMessages.good}\n${source.indexx}`)
-    break;
+      sender.write(`${httpVersion} ${statusMessages.good}\n${source.indexx}`);
+      sender.end();
+      break;
 
     default:
-      console.log('err');
+      sender.write(`${httpVersion} ${statusMessages.notFound}\n${source.fourOhFour}`);
+      sender.end();
       break;
   }
 }

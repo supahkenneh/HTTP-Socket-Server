@@ -22,9 +22,13 @@ const client = net.createConnection(PORT, 'localhost', () => {
 
 //send 'requests' to server
 client.on('data', (request) => {
-  // console.log(request.toString().trim());
+  console.log(request.toString().trim());
 })
 process.stdin.pipe(client);
+
+client.on('error', (err) => {
+  process.exit();
+})
 
 //close connection
 client.on('end', () => {

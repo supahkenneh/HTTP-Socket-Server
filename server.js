@@ -21,9 +21,9 @@ const server = net.createServer((request) => {
   })
 })
 
-server.on('end', () => {
-  console.log(`Disconnect client`);
-})
+// server.on('error', (err) => {
+//   console.log(err);
+// })
 
 //listening on port
 server.listen(PORT, () => {
@@ -69,6 +69,7 @@ function generateResponse(data, sender) {
       sender.write(createHeader(httpVersion, statusMessages.notFound, source.fourOhFour));
       break;
   }
+  sender.destroy();
 };
 
 function createHeader(httpVer, status, source){

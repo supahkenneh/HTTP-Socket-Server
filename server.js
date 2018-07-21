@@ -1,3 +1,5 @@
+const source = require('./sourcefiles');
+
 //use net methods
 const net = require('net');
 
@@ -17,8 +19,7 @@ const server = net.createServer((request) => {
 //log that request has been made
   request.on('data', (request) => {
     console.log('A request has been made');
-    const data = request.toString();
-    console.log(`this is ${data}`);
+    requestInfo(request);
   })
 
 //disconnect
@@ -31,3 +32,37 @@ const server = net.createServer((request) => {
 server.listen(PORT, () => {
   console.log(`Waiting for requests`);
 });
+
+
+function requestInfo (request) {
+  //array of data in request seperated by their line breaks
+  let parsedRequest = request.split('\r\n');
+  console.log(parsedRequest);
+  let method = parsedRequest[0].split(' ');
+  let wantedFile = method[1];
+  switch(wantedFile){
+    case '/hydrogen.html':
+    console.log('hydrogen');
+    break;
+    
+    case '/helium.html':
+    console.log('helium');
+    break;
+
+    case '/404.html':
+    console.log('404');
+    break;
+
+    case '/styles.css':
+    console.log('css');
+    break;
+
+    case `/`:
+    console.log('index');
+    break;
+
+    case '/index.html':
+    console.log('index');
+    break;
+  }
+}

@@ -48,7 +48,7 @@ hydrogen: `
 </body>
 </html>`,
 
-index: `<!DOCTYPE html>
+indexx: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">

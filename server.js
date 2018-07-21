@@ -5,24 +5,25 @@ const net = require('net');
 
 const PORT = 8080;
 
-const files = {
-  '/index.html' : '/index.html',
-  '/helium.html' : '/helium.html',
-  '/hydrogen.html' : '/hydrogen.html',
-  '/styles.css' : '/styles.css'
-};
+const statusMessages = {
+  good: `200 OK`,
+  notFound: `404 Not Found`,
+  forbidden: `403 Forbidden`,
+  serverError: `500 Internal Server Error`,
+}
 
 //create server
 const server = net.createServer((request) => {
   request.setEncoding('utf8');
 
-//log that request has been made
-  request.on('data', (request) => {
+  //log that request has been made
+  request.on('data', (data) => {
     console.log('A request has been made');
-    requestInfo(request);
+    generateResponse(data, request);
+    request.end();
   })
 
-//disconnect
+  //disconnect
   request.on('end', () => {
     console.log(`Request fulfilled`);
   })
@@ -34,35 +35,43 @@ server.listen(PORT, () => {
 });
 
 
-function requestInfo (request) {
-  //array of data in request seperated by their line breaks
-  let parsedRequest = request.split('\r\n');
-  console.log(parsedRequest);
-  let method = parsedRequest[0].split(' ');
-  let wantedFile = method[1];
-  switch(wantedFile){
+function generateResponse(data, sender) {
+
+//array of data in request seperated by their line breaks
+let parsedRequest = data.split('\r\n');
+let header = parsedRequest[0].split(' ');
+let wantedFile = header[1];
+let httpVersion = header[2];
+console.log(`requested ${wantedFile}`);
+
+//grabs requested document
+  switch (wantedFile) {
     case '/hydrogen.html':
-    console.log('hydrogen');
-    break;
-    
+    sender.write(`${httpVersion} ${statusMessages.good}\n${source.hydrogen}`)
+      break;
+
     case '/helium.html':
-    console.log('helium');
+    sender.write(`${httpVersion} ${statusMessages.good}\n${source.helium}`)
     break;
 
     case '/404.html':
-    console.log('404');
+    sender.write(`${httpVersion} ${statusMessages.good}\n${source.fourOhFour}`)
     break;
 
     case '/styles.css':
-    console.log('css');
+    sender.write(`${httpVersion} ${statusMessages.good}\n${source.css}`)
     break;
 
     case `/`:
-    console.log('index');
+    sender.write(`${httpVersion} ${statusMessages.good}\n${source.indexx}`)
     break;
 
     case '/index.html':
-    console.log('index');
+    sender.write(`${httpVersion} ${statusMessages.good}\n${source.indexx}`)
     break;
+
+    default:
+      console.log('err');
+      break;
   }
 }

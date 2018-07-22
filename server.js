@@ -2,13 +2,6 @@ const source = require('./sourcefiles');
 const net = require('net');
 const PORT = 8080;
 
-const statusMessages = {
-  good: `200 OK`,
-  notFound: `404 Not Found`,
-  forbidden: `403 Forbidden`,
-  serverError: `500 Internal Server Error`,
-}
-
 //create server
 const server = net.createServer((request) => {
   request.setEncoding('utf8');
@@ -18,13 +11,13 @@ const server = net.createServer((request) => {
     console.log('A request has been made');
     generateResponse(data, request);
     console.log(`Request fulfilled!\nAny other requests?`);
-  })
+  });
   
   //error handle
   request.on('error', () => {
     process.exit();
   })
-})
+});
 
 //listening on port
 server.listen(PORT, () => {
@@ -33,7 +26,7 @@ server.listen(PORT, () => {
 
 
 
-/************** HELPER FUNCTIONS **************/
+/************** UTILITY FUNCTIONS and VARIABLES **************/
 //function that takes request and generates response
 function generateResponse(data, sender) {
 
@@ -80,4 +73,11 @@ Status: ${httpVer} ${status}
 Server: ${process.env.USER} ${process.env.TERM_PROGRAM} ${process.env.TERM_PROGRAM_VERSION}
 
 ${source}`
+};
+
+const statusMessages = {
+  good: `200 OK`,
+  notFound: `404 Not Found`,
+  forbidden: `403 Forbidden`,
+  serverError: `500 Internal Server Error`,
 };

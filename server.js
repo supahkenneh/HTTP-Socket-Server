@@ -19,6 +19,11 @@ const server = net.createServer((request) => {
     generateResponse(data, request);
     console.log(`Request fulfilled!\nAny other requests?`);
   })
+  
+  //error handle
+  request.on('error', () => {
+    process.exit();
+  })
 })
 
 //listening on port

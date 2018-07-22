@@ -1,12 +1,10 @@
 const net = require('net');
-
 const PORT = 8080;
 
 //create connection to server
 const client = net.createConnection(PORT, 'localhost', () => {
   client.setEncoding('utf8');
   console.log(`Request made to ${PORT}`);
-
   //grabs request from node command line
   process.argv.forEach((value, index) => {
     //grabs .html or .css portion of address
@@ -19,14 +17,8 @@ const client = net.createConnection(PORT, 'localhost', () => {
     let indexOfHTML = wantedFile.indexOf('/');
     let requestedHTML = wantedFile.substring(indexOfHTML, wantedFile.length);
     let host = wantedFile.substring(0, indexOfHTML);
-
     //writes to server in request header format
-    client.write(`GET ${requestedHTML} HTTP/1.1
-Date: ${new Date()}
-Host: ${host} ${PORT}
-User-Agent: ${process.env.TERM_PRORAM} ${process.env.TERM_PROGRAM_VERSION}
-
-`);
+    sendRequest(requestedHTML, host);
   })
 });
 
@@ -37,7 +29,7 @@ client.on('data', (request) => {
 process.stdin.pipe(client);
 
 //handles ECONNRESET error
-client.on('error', (err) => {
+client.on('error', () => {
   process.exit();
 })
 
@@ -45,3 +37,14 @@ client.on('error', (err) => {
 client.on('end', () => {
   console.log('terminating connection');
 });
+
+
+/************* HELPER FUNCTIONS *************/
+function sendRequest(HTML, hostServer) {
+  client.write(`GET ${requestedHTML} HTTP/1.1
+  Date: ${new Date()}
+  Host: ${host} ${PORT}
+  User-Agent: ${process.env.TERM_PRORAM} ${process.env.TERM_PROGRAM_VERSION}
+  
+  `)
+}

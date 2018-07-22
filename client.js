@@ -41,6 +41,7 @@ client.on('end', () => {
 
 
 /********** UTLITY FUNCTIONS and VARIABLES **********/
+//takes CLI request and converts to HTTP Request format
 function sendRequest(HTML, hostServer) {
   client.write(`GET ${HTML} HTTP/1.1
   Date: ${new Date()}

@@ -10,7 +10,7 @@ const server = net.createServer((request) => {
   request.on('data', (data) => {
     console.log('A request has been made');
     generateResponse(data, request);
-    console.log(`Request fulfilled!\nAny other requests?`);
+    console.log(`\nRequest fulfilled!\nAny other requests?`);
   });
   
   //error handle
@@ -35,7 +35,7 @@ function generateResponse(data, sender) {
   let header = parsedRequest[0].split(' ');
   let wantedFile = header[1];
   let httpVersion = header[2];
-  console.log(`${wantedFile} requested`);
+  process.stdout.write(`${wantedFile} requested`);
 
   //grabs requested document and returns response header
   switch (wantedFile) {
@@ -66,6 +66,7 @@ function generateResponse(data, sender) {
   sender.destroy();
 };
 
+//generates HTTP response
 function createHeader(httpVer, status, source) {
   return `${httpVer} ${status}
 Date: ${new Date()}

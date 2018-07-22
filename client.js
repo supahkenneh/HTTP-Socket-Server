@@ -9,14 +9,24 @@ const client = net.createConnection(PORT, 'localhost', () => {
 
   //grabs request from node command line
   process.argv.forEach((value, index) => {
-    console.log(`${index}: ${value}`);
     //grabs .html or .css portion of address
     let wantedFile = process.argv[2];
+    //if argument doesn't exist, give instruction and end process
+    if (!wantedFile) {
+      process.stdout.write('INCORRECT INPUT. \nhelp/usage:\n Please make requests in the following format:\nnode client.js HTML/URL link')
+      process.exit();
+    }
     let indexOfHTML = wantedFile.indexOf('/');
     let requestedHTML = wantedFile.substring(indexOfHTML, wantedFile.length);
+    let host = wantedFile.substring(0, indexOfHTML);
 
     //writes to server in request header format
-    client.write(`GET ${requestedHTML} HTTP/1.1`);
+    client.write(`GET ${requestedHTML} HTTP/1.1
+Date: ${new Date()}
+Host: ${host} ${PORT}
+User-Agent: ${process.env.TERM_PRORAM} ${process.env.TERM_PROGRAM_VERSION}
+
+`);
   })
 });
 
@@ -26,6 +36,7 @@ client.on('data', (request) => {
 })
 process.stdin.pipe(client);
 
+//handles ECONNRESET error
 client.on('error', (err) => {
   process.exit();
 })

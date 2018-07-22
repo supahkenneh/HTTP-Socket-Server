@@ -17,13 +17,9 @@ const server = net.createServer((request) => {
   request.on('data', (data) => {
     console.log('A request has been made');
     generateResponse(data, request);
-    console.log(`Request fulfilled!`);
+    console.log(`Request fulfilled!\nAny other requests?`);
   })
 })
-
-// server.on('error', (err) => {
-//   console.log(err);
-// })
 
 //listening on port
 server.listen(PORT, () => {
@@ -72,11 +68,11 @@ function generateResponse(data, sender) {
   sender.destroy();
 };
 
-function createHeader(httpVer, status, source){
+function createHeader(httpVer, status, source) {
   return `${httpVer} ${status}
+Date: ${new Date()}
 Status: ${httpVer} ${status}
 Server: ${process.env.USER} ${process.env.TERM_PROGRAM} ${process.env.TERM_PROGRAM_VERSION}
-Date: ${new Date()}
 
 ${source}`
 };
